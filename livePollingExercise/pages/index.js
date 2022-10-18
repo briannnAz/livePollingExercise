@@ -1,7 +1,31 @@
 import Head from 'next/head';
+import LivePoll from '../components/LivePoll';
 import Questionnaire from '../components/Questionnaire';
 import Button from '@mui/material/Button';
-export default function Home() {
+
+// Adding APIs for Accessing The Set up Mongo DB Atlas Data APIs
+const pollingResults = `https://data.mongodb-api.com/app/data-tomyk/endpoint/getPollingResults`;
+const pollingData = `https://data.mongodb-api.com/app/data-tomyk/endpoint/getPollingData`;
+
+
+// Adding Call to Mongo DB for Polling Intial Data and Polling Results
+export async function getServerSideProps(context) {
+  let {res} = context;
+  res = await fetch(pollingData);
+  const pollData = await res.json();
+
+  res = await fetch(pollingResults);
+  const pollResult = await res.json();
+
+  return {
+    props: { pollData, pollResult },
+  };
+}
+
+// Passing Props to be used in the Component as a test before passing to The Live Poll Component
+export default function Home( {pollData, pollResult} ) {
+  console.log(pollData);
+  console.log(pollResult);
   return (
     <div className="container">
       <Head>
@@ -21,7 +45,7 @@ export default function Home() {
           >
           Let's See What the Crowd Favorite  is.
           </a> */}
-
+        <LivePoll />
         <Button variant="contained">Take the Poll</Button>
 
         {/* <div className="grid">

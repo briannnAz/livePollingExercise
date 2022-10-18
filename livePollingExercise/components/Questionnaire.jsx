@@ -19,12 +19,8 @@ import {
 
 // Made for the poll questions and the live results
 
-// Steps Should Be Questions asked (Retrieve from DB);
-const steps = [
-  "Question 1",
-  "Question 2",
-  "Question 3",
-];
+// Steps Should Be Questions (Retrieve from DB);
+const steps = [];
 
 // Question Answers should be taken from DB 
 const answers = [
@@ -39,6 +35,10 @@ const questions = [
   "Which game would you say is the most competitive?",
   "If you could only play one, which would it be?"
 ];
+
+questions.forEach((question) => {
+  steps.push('Question '+ questions.indexOf(question));
+})
 
 // Object to store answer Choices ( needs function once next is selected or finish is selected)
 const results = {
@@ -177,3 +177,20 @@ function Questionnaire() {
   );
 }
 export default Questionnaire;
+
+// Due to ideally rapidly changing data we will load the pages at request time rather than build time
+export async function getServerSideProps() {
+  React.useEffect();
+  // Fetch
+  // Example
+  const response = await fetch('/some-api');
+  const data = await req.json();
+
+    return {
+        props: {data},
+    }
+}
+
+export function Car ({car}) {
+  return <h1>{car.make}</h1>
+}
