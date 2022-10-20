@@ -3,15 +3,10 @@ import LivePoll from '../components/LivePoll';
 import Questionnaire from '../components/Questionnaire';
 import Button from '@mui/material/Button';
 
-// Adding APIs for Accessing The Set up Mongo DB Atlas Data APIs
-const pollingResults = `https://data.mongodb-api.com/app/data-tomyk/endpoint/getPollingResults`;
-const pollingData = `https://data.mongodb-api.com/app/data-tomyk/endpoint/getPollingData`;
-
-
 // Adding Call to Mongo DB Data API for Polling Intial Data and Polling Results
 export async function getServerSideProps(context) {
   let {res} = context;
-  res = await fetch(pollingData,{
+  res = await fetch(process.env.POLL_DATA_API,{
     method: 'GET',
     // body: context,
     headers: {
@@ -20,7 +15,7 @@ export async function getServerSideProps(context) {
     }});;
   const pollData = await res.json();
 
-  res = await fetch( pollingResults,{
+  res = await fetch( process.env.POLL_RESULT_API,{
         method: 'GET',
         // body: context,
         headers: {
