@@ -6,8 +6,10 @@ import { DataGrid } from "@mui/x-data-grid";
 // Made to show the results from the DB for polls
 
 export default function LivePoll({ pollData, pollResult }) {
-  const [ dataDisplay, setDataDisplay ] = React.useState("question1");
+  const [ dataDisplay, setDataDisplay ] = React.useState("");
   const [ gridData, setGridData ] = React.useState([]);
+
+  let initialRow= [];
   let menuItems = [];
   let pollStats = {};
   let qCount = 1;
@@ -40,15 +42,24 @@ export default function LivePoll({ pollData, pollResult }) {
   ];
 
   const settingUpGrid = (event) => {
+    const currentChoice = event.target.value;
     // First Check the question Selected
-    setDataDisplay(event.target.value);
+    setDataDisplay(currentChoice);
+
+    // Did this as a check to ensure I dont get a lag on the state;
+    dataDisplay = currentChoice;
 
     // Change the data grid based on the selected question 
-    setRowData(pollStats[dataDisplay]);
+    if(dataDisplay != null || dataDisplay != ''){
+      setRowData(pollStats[dataDisplay]);
+    }
   };
 
   // Creating Row items for each Possible answer result per question
   const setRowData = (source) => {
+    if(source== undefined){
+      return;
+    }
     let rowData = [];
     source.forEach( value => {
       rowData.push({
