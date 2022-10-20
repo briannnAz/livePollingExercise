@@ -11,10 +11,22 @@ const pollingData = `https://data.mongodb-api.com/app/data-tomyk/endpoint/getPol
 // Adding Call to Mongo DB Data API for Polling Intial Data and Polling Results
 export async function getServerSideProps(context) {
   let {res} = context;
-  res = await fetch(pollingData);
+  res = await fetch(pollingData,{
+    method: 'GET',
+    // body: context,
+    headers: {
+      'Conent-Type': 'application/json',
+      'api-key':process.env.API_KEY,
+    }});;
   const pollData = await res.json();
 
-  res = await fetch(pollingResults);
+  res = await fetch( pollingResults,{
+        method: 'GET',
+        // body: context,
+        headers: {
+          'Conent-Type': 'application/json',
+          'api-key':process.env.API_KEY,
+        }});
   const pollResult = await res.json();
 
   return {
