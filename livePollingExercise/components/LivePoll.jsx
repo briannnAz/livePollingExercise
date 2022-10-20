@@ -9,7 +9,6 @@ export default function LivePoll({ pollData, pollResult }) {
   const [ dataDisplay, setDataDisplay ] = React.useState("");
   const [ gridData, setGridData ] = React.useState([]);
 
-  let initialRow= [];
   let menuItems = [];
   let pollStats = {};
   let qCount = 1;
@@ -63,10 +62,9 @@ export default function LivePoll({ pollData, pollResult }) {
     let rowData = [];
     source.forEach( value => {
       rowData.push({
-        id:value['_id'], game: value['_id'], votes: value['votes'], popularity: `${(100 * (value['votes']/pollStats.totalResponses).toFixed(3))}%`
+        id:value['_id'], game: value['_id'], votes: value['votes'], popularity: `${(100 * (value['votes']/pollStats.totalResponses).toFixed(2))}%`
       })
     });
-    initialRow = rowData;
     setGridData(rowData);
   };
 
