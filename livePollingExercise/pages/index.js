@@ -8,7 +8,7 @@ const pollingResults = `https://data.mongodb-api.com/app/data-tomyk/endpoint/get
 const pollingData = `https://data.mongodb-api.com/app/data-tomyk/endpoint/getPollingData`;
 
 
-// Adding Call to Mongo DB for Polling Intial Data and Polling Results
+// Adding Call to Mongo DB Data API for Polling Intial Data and Polling Results
 export async function getServerSideProps(context) {
   let {res} = context;
   res = await fetch(pollingData);
@@ -29,55 +29,17 @@ export default function Home( {pollData, pollResult} ) {
   return (
     <div className="container">
       <Head>
-        <title>Create Next App</title>
+        <title>Battle Of the Games</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main>
         <h1 className="title">
-          Let's See What the Crowd Favorite  is.
+          Which Game is KING Right Now?
         </h1>
-                  {/* <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-          >
-          Let's See What the Crowd Favorite  is.
-          </a> */}
-        <LivePoll />
-        <Button variant="contained">Take the Poll</Button>
-
-        {/* <div className="grid">
-          <a href="https://nextjs.org/docs" className="card">
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className="card">
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className="card"
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="card"
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div> */}
-        <Questionnaire />
+        {/* Passing Props for the DB data to each individual component */}
+        <LivePoll pollData={pollData} pollResult={pollResult} />
+        <Questionnaire pollData={pollData} />
       </main>
 
       <footer>
