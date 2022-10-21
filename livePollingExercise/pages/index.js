@@ -8,18 +8,16 @@ export async function getServerSideProps(context) {
   let {res} = context;
   res = await fetch(process.env.POLL_DATA_API,{
     method: 'GET',
-    // body: context,
     headers: {
-      'Conent-Type': 'application/json',
+      'Content-Type': 'application/json',
       'api-key':process.env.API_KEY,
     }});;
   const pollData = await res.json();
 
   res = await fetch( process.env.POLL_RESULT_API,{
         method: 'GET',
-        // body: context,
         headers: {
-          'Conent-Type': 'application/json',
+          'Content-Type': 'application/json',
           'api-key':process.env.API_KEY,
         }});
   const pollResult = await res.json();

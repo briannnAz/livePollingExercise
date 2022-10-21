@@ -69,10 +69,10 @@ export default function LivePoll({ pollData, pollResult }) {
   };
 
   return (
-    <div>
-      <h2>Live Poll Data Updated Every Minute!</h2>
+    <div style={{paddingBottom:"30px"}}>
+      <h2 style={{textAlign:"center"}}>Live Poll Data Updated Every Minute!</h2>
       <div>
-        <Box sx={{ minWidth: 500 }}>
+        <Box style={{paddingBottom:"20px"}} sx={{ minWidth: 500 }}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Question</InputLabel>
             <Select
