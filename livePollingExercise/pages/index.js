@@ -2,24 +2,27 @@ import Head from 'next/head';
 import LivePoll from '../components/LivePoll';
 import Questionnaire from '../components/Questionnaire';
 import Button from '@mui/material/Button';
+import React from 'react';
 
 // Adding Call to Mongo DB Data API for Polling Intial Data and Polling Results
 export async function getServerSideProps(context) {
-  let {res} = context;
-  res = await fetch(process.env.POLL_DATA_API,{
+  let { res } = context;
+  res = await fetch(process.env.POLL_DATA_API, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'api-key':process.env.API_KEY,
-    }});;
+      'api-key': process.env.API_KEY,
+    }
+  });;
   const pollData = await res.json();
 
-  res = await fetch( process.env.POLL_RESULT_API,{
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'api-key':process.env.API_KEY,
-        }});
+  res = await fetch(process.env.POLL_RESULT_API, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'api-key': process.env.API_KEY,
+    }
+  });
   const pollResult = await res.json();
 
   return {
@@ -27,8 +30,23 @@ export async function getServerSideProps(context) {
   };
 }
 
+export function refreshApp() {
+  window.location.reload();
+}
 // Passing Props to be used in the Component as a test before passing to The Live Poll Component
-export default function Home( {pollData, pollResult} ) {
+export default function Home({ pollData, pollResult }) {
+  const[showPoll, setShowPoll] = React.useState({show:false, label:"Take Poll"});
+
+  function handleChange(){
+    let next;
+    if(showPoll.show){
+      next = {show:false, label:"Take Poll"};
+    } else {
+      next = {show:true, label:"Hide Poll"};
+    }
+    setShowPoll(next);
+  }
+
   console.log(pollData);
   console.log(pollResult);
   return (
@@ -44,7 +62,7 @@ export default function Home( {pollData, pollResult} ) {
         </h1>
         {/* Passing Props for the DB data to each individual component */}
         <LivePoll pollData={pollData} pollResult={pollResult} />
-        <Questionnaire pollData={pollData} />
+        <Questionnaire className={{}} pollData={pollData} />
       </main>
 
       <footer>
@@ -59,6 +77,27 @@ export default function Home( {pollData, pollResult} ) {
       </footer>
 
       <style jsx>{`
+        .displayPoll {
+          display: block;
+          margin-top: 10px;
+          animation: reveal 2s 1;
+        }
+
+        .hidePoll {
+          display: none;
+        }
+
+        @keyframes reveal {
+          from {
+            opacity: 0;
+            margin-top: 50px;
+          }
+          to {
+            opacity: 1;
+            margin-top: 10px;
+          }
+        }
+
         .container {
           min-height: 100vh;
           padding: 0 0.5rem;

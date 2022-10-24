@@ -1,13 +1,28 @@
 import React, { Component } from "react";
 import Head from "next/head";
-import { Box, InputLabel, MenuItem, FormControl,FormHelperText, Select } from "@mui/material";
+import { Box, InputLabel, MenuItem, FormControl,FormHelperText, Select, Chip } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import Home, { refreshApp } from "../pages";
 
 // Made to show the results from the DB for polls
 
 export default function LivePoll({ pollData, pollResult }) {
   const [ dataDisplay, setDataDisplay ] = React.useState("");
   const [ gridData, setGridData ] = React.useState([]);
+  const [ countDown, setCountDown ] = React.useState(60);
+
+  // Utilizing useEffect to create a countDown for letting the user know when the Live Poll Data Will update
+  React.useEffect(() => {
+    let counting = setTimeout(() => {
+        setCountDown((current) => current - 1);
+    }, 1000);
+
+    if(countDown==-1){
+      setCountDown(60);
+      clearTimeout(counting);
+      refreshApp()
+  }
+  }, [countDown]);
 
   let menuItems = [];
   let pollStats = {};
@@ -23,7 +38,6 @@ export default function LivePoll({ pollData, pollResult }) {
     pollStats[q] = pollResult[q];
     qCount++;
   });
-  console.log("These are the polling stats so far: ", pollStats);
   
   // Creating Columns of Data grid
   const columns = [
@@ -70,7 +84,7 @@ export default function LivePoll({ pollData, pollResult }) {
 
   return (
     <div style={{paddingBottom:"30px"}}>
-      <h2 style={{textAlign:"center"}}>Live Poll Data Updated Every Minute!</h2>
+      <h2 style={{textAlign:"center"}}>Live Poll Data Updates in <Chip label={countDown} /></h2>
       <div>
         <Box style={{paddingBottom:"20px"}} sx={{ minWidth: 500 }}>
           <FormControl fullWidth>

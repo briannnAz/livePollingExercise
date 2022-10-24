@@ -103,10 +103,6 @@ function Questionnaire({ pollData }) {
 
   return (
     <div>
-      <div style={{display: "flex", flexDirection:"column"}}>
-        <Button variant="outlined" style={{ marginBottom:"25px"}}>Take the Poll</Button>
-      </div>
-      
       <Box
         style={{
           padding: "10px",
