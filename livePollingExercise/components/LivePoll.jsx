@@ -9,20 +9,6 @@ import Home, { refreshApp } from "../pages";
 export default function LivePoll({ pollData, pollResult }) {
   const [ dataDisplay, setDataDisplay ] = React.useState("");
   const [ gridData, setGridData ] = React.useState([]);
-  const [ countDown, setCountDown ] = React.useState(60);
-
-  // Utilizing useEffect to create a countDown for letting the user know when the Live Poll Data Will update
-  React.useEffect(() => {
-    let counting = setTimeout(() => {
-        setCountDown((current) => current - 1);
-    }, 1000);
-
-    if(countDown==-1){
-      setCountDown(60);
-      clearTimeout(counting);
-      refreshApp()
-  }
-  }, [countDown]);
 
   let menuItems = [];
   let pollStats = {};
@@ -84,9 +70,9 @@ export default function LivePoll({ pollData, pollResult }) {
 
   return (
     <div style={{paddingBottom:"30px"}}>
-      <h2 style={{textAlign:"center"}}>Live Poll Data Updates in <Chip label={countDown} /></h2>
+      <h2 style={{textAlign:"center"}}>Live Poll Data <Chip label="Refresh Data" variant="outlined" onClick={refreshApp} /></h2>
       <div>
-        <Box style={{paddingBottom:"20px"}} sx={{ minWidth: 500 }}>
+        <Box style={{paddingBottom:"20px", backgroundColor:'white'}} sx={{ minWidth: 500 }}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Question</InputLabel>
             <Select
@@ -102,7 +88,7 @@ export default function LivePoll({ pollData, pollResult }) {
           </FormControl>
         </Box>
       </div>
-      <Box sx={{ height: 400, width: "100%" }}>
+      <Box style={{ backgroundColor:"white"}} sx={{ height: 400, width: "100%" }}>
         <DataGrid
           rows={gridData}
           columns={columns}

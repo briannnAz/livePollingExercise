@@ -1,6 +1,5 @@
 import * as React from "react";
-import { Component } from "react";
-import { SelectOptionGroup } from "@mui/base";
+import Router, { useRouter } from 'next/router';
 import {
   Button,
   StepLabel,
@@ -17,11 +16,7 @@ import {
   FormLabel,
 } from "@mui/material";
 
-
-// Using a different method for poll result insertion to utilize the api key protection of the DB Data API and prevent SQL injection
-
 // Submission should take all answers and append them to the individual results to the DB as a new record allowing redundancy
-
 function Questionnaire({ pollData }) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [value, setValue] = React.useState(null);
@@ -30,10 +25,10 @@ function Questionnaire({ pollData }) {
   // Array used for ease of reset and back tracking in poll
   const [selections, setSelections] = React.useState({});
   const steps = [];
+  const router = useRouter();
 
   // Object to store answer Choices ( needs function once next is selected or finish is selected)
   let results = {};
-
   pollData[0].questions.forEach((question) => {
     steps.push("Q" + `${pollData[0].questions.indexOf(question) + 1}`);
     results[`question${pollData[0].questions.indexOf(question) + 1}`] = null;
@@ -82,23 +77,20 @@ function Questionnaire({ pollData }) {
     setValue(event.target.value);
   };
 
-  // Compile data for DB submission
-
-  // Making API call to DB to INSERT New record for Polling Data.
+  // Compiling Poll Result Data to be send to the submission page and sent to the DB.
   const compilePollResults = async () => {
     console.log(selections);
-    const response = await fetch(process.env.POLL_INSERT_API
-      , {
-      method: "POST",
-      body: JSON.stringify(selections),
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: "application/json",
-        "api-key": process.env.API_KEY,
-      },
-    });
-    const data = await response.json();
-    console.log(data);
+    router.query = selections;
+    console.log(router);
+    let queryParam = '?';
+
+    // Looping through the keys in the submission object to build my query params
+    Object.keys(selections).forEach(question => {
+      queryParam = queryParam + question+'='+selections[question]+'&';
+      });
+
+    // Passing in submission.js as a route and changing the appearance of the URL to prevent SQL injection to the db
+    router.push(`submission`+queryParam,'submission');
   };
 
   return (
@@ -107,7 +99,7 @@ function Questionnaire({ pollData }) {
         style={{
           padding: "10px",
           border: "solid 2px black",
-          // color: "white",
+          backgroundColor:'white',
           borderRadius: "5px",
           minHeight: "400px",
           minWidth:"500px",

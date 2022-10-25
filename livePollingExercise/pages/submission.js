@@ -1,85 +1,57 @@
 import Head from 'next/head';
-import LivePoll from '../components/LivePoll';
-import Questionnaire from '../components/Questionnaire';
-import Button from '@mui/material/Button';
+import Router, { useRouter } from 'next/router';
 import React from 'react';
+import { CircularProgress } from '@mui/material';
 
-// Adding Call to Mongo DB Data API for Polling Intial Data and Polling Results
+
+// Defined a new page to utilize getServerSideProps on Submission of the poll form since it only runs at build time.
 export async function getServerSideProps(context) {
-  let { res } = context;
-  res = await fetch(process.env.POLL_DATA_API, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'api-key': process.env.API_KEY,
-    }
-  });;
-  const pollData = await res.json();
+    let { res, query } = context;
+    console.log(JSON.stringify(query));
 
-  res = await fetch(process.env.POLL_RESULT_API, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'api-key': process.env.API_KEY,
-    }
-  });
-  const pollResult = await res.json();
+    // Changing the request to Match the request in my Mongo DB Data API instance. Uses API_KEY, POST Method, and body from Questionnaire sent as a query param
+    res = await fetch(process.env.POLL_INSERT_API, {
+        method: 'POST',
+        body: JSON.stringify(query),
+        headers: {
+            'Content-Type': 'application/json',
+            'api-key': process.env.API_KEY,
+        }
+    });
+    const insertResult = await res.json();
 
-  return {
-    props: { pollData, pollResult },
-  };
+    return {
+        props: { insertResult, query },
+    };
 }
 
-export function refreshApp() {
-  window.location.reload();
-}
-// Passing Props to be used in the Component as a test before passing to The Live Poll Component
-export default function Home({ pollData, pollResult }) {
-  const[showPoll, setShowPoll] = React.useState({show:false, label:"Take Poll"});
+export default function InsertResult({ insertResult }) {
+    const [countDown, setCountDown] = React.useState(5);
 
-  function openQuestions(){
-    let next;
-    if(showPoll.show){
-      next = {show:false, label:"Take Poll"};
-    } else {
-      next = {show:true, label:"Hide Poll"};
-    }
-    setShowPoll(next);
-    window.scrollTo(0,500);
-;  }
+    // Creating a New instance of router to return back ot the main index.js page
+    const newRouter = useRouter();
+    React.useEffect(() => {
+        let redirect = setTimeout(() => {
+            setCountDown((current) => current - 1);
+        }, 1000);
+        if(countDown == 0){
+            clearTimeout(redirect);
+            newRouter.push('/');
+        };
+    }, [countDown]);
 
-  return (
-    <div className="container">
-      <Head>
-        <title>Battle Of the Games</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main>
-        <h2 className="title">
-          Which Game is KING Right Now?
-        </h2>
-        {/* Passing Props for the DB data to each individual component */}
-        <LivePoll  pollData={pollData} pollResult={pollResult} />
-
-        <Button onClick={openQuestions} style={{
-          marginBottom: '20px',
-        }}>{showPoll.label}</Button>
-        {showPoll.show &&<Questionnaire id='questionnaire' className={showPoll.show? 'displayPoll' : 'hidePoll'} pollData={pollData} />}
-      </main>
-
-      <footer>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel" className="logo" />
-        </a>
-      </footer>
-
-      <style jsx globa>{`
+    return (
+        <div style={{
+            textAlign: 'center',
+            paddingTop: '35%',
+        }}>
+            <h1>Thanks for your Submission!</h1>
+            <CircularProgress sx={{
+                width: 300
+            }} />
+            <h3>Redirecting back to the live poll in {countDown}.</h3>
+            {insertResult}
+            <style jsx>{`
         .displayPoll {
           display: block;
           margin-top: 10px;
@@ -231,7 +203,7 @@ export default function Home({ pollData, pollResult }) {
         }
       `}</style>
 
-      <style jsx global>{`
+            <style jsx global>{`
         html,
         body {
           padding: 0;
@@ -245,6 +217,6 @@ export default function Home({ pollData, pollResult }) {
           box-sizing: border-box;
         }
       `}</style>
-    </div>
-  )
+        </div>
+    );
 }
