@@ -84,7 +84,7 @@ export default function LivePoll({ pollData, pollResult }) {
             >
               {menuItems}
             </Select>
-            <FormHelperText>Pick a Question to see the fan favorite right now!</FormHelperText>
+            <FormHelperText>Pick a Question to see Rankings!</FormHelperText>
           </FormControl>
         </Box>
       </div>

@@ -30,9 +30,11 @@ export async function getServerSideProps(context) {
   };
 }
 
+// Added refresh for page to refresh data from Mongo DB
 export function refreshApp() {
   window.location.reload();
 }
+
 // Passing Props to be used in the Component as a test before passing to The Live Poll Component
 export default function Home({ pollData, pollResult }) {
   const[showPoll, setShowPoll] = React.useState({show:false, label:"Take Poll"});
@@ -62,6 +64,7 @@ export default function Home({ pollData, pollResult }) {
         {/* Passing Props for the DB data to each individual component */}
         <LivePoll  pollData={pollData} pollResult={pollResult} />
 
+        {/* Adding conditional click to open up questionnaire */}
         <Button onClick={openQuestions} size="large" style={{
           marginBottom: '20px',
         }}>{showPoll.label}</Button>

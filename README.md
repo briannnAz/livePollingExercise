@@ -8,8 +8,4 @@
 
 Not only did I feel it would be it would be a nice way to pick up new resources for myself but, I felt for a small exercise like this, it would be be the most efficient for compiling something that should be experienced in real time.
 
-- Was On Track to Fully finishing everything I wanted to get done but then I ran into the CORS Policy issue. After trying a large number of things to get my api calls to work, nothing seemed to have helped remedy the situation, leaving 2 DB API calls I wanted to do, nearly impossible to test without compromising Google Chrome. Will try again with chrome cors disabled.
-
-- Will add functions with the idea of it working in mind
-
-- Was able to work around the CORS issue by relying on using multiple pages for getServerSideProps data fetching
+I ran into issues with CORS Browser Policies when trying to make API requests to My Mongo DB, which greatly set me back and caused me to require extra time. But I was able to figure out a work around them using some creativity.
