@@ -62,7 +62,7 @@ export default function Home({ pollData, pollResult }) {
         {/* Passing Props for the DB data to each individual component */}
         <LivePoll  pollData={pollData} pollResult={pollResult} />
 
-        <Button onClick={openQuestions} style={{
+        <Button onClick={openQuestions} size="large" style={{
           marginBottom: '20px',
         }}>{showPoll.label}</Button>
         {showPoll.show &&<Questionnaire id='questionnaire' className={showPoll.show? 'displayPoll' : 'hidePoll'} pollData={pollData} />}
@@ -171,7 +171,7 @@ export default function Home({ pollData, pollResult }) {
         }
 
         code {
-          background: #fafafa;
+          background: #hehehe;
           border-radius: 5px;
           padding: 0.75rem;
           font-size: 1.1rem;
